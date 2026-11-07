@@ -1,0 +1,69 @@
+name: tabiew
+base: core26
+version: '0.16.0'
+title: Tabiew
+summary: View and query CSV, Parquet, JSON, Excel and SQLite files in the terminal
+description: |
+  Tabiew (tw) opens tabular data in an interactive terminal viewer. It reads
+  CSV, TSV, Parquet, Arrow, JSON, JSON Lines, Excel and SQLite files, and lets
+  you sort, filter, search and query them with SQL across tabs.
+
+  **Examples**
+
+     tabiew.tw data.csv
+     tabiew.tw data.txt -f parquet
+     tabiew.tw ctl ps
+
+  **File access**
+
+  Tabiew can open files in your home directory and download data from URLs.
+  To also open files on USB drives and other removable media (/media, /mnt),
+  run:
+
+     sudo snap connect tabiew:removable-media
+license: MIT
+grade: stable
+confinement: strict
+website: https://github.com/shshemi/tabiew
+source-code:
+  - https://github.com/shshemi/tabiew
+  - https://github.com/sidalit/tabiew-snap
+issues:
+  - https://github.com/shshemi/tabiew/issues
+  - https://github.com/sidalit/tabiew-snap/issues
+contact: https://github.com/sidalit/tabiew-snap/issues
+
+platforms:
+  amd64:
+  arm64:
+
+apps:
+  tw:
+    command: bin/tw
+    completer: share/bash-completion/completions/tw
+    plugs:
+      - home
+      - network
+      - removable-media
+
+parts:
+  tabiew:
+    plugin: rust
+    source: https://github.com/shshemi/tabiew.git
+    source-tag: v$SNAPCRAFT_PROJECT_VERSION
+    source-depth: 1
+    rust-channel: stable
+    build-packages:
+      - build-essential
+      # SQLCipher builds its vendored OpenSSL from source.
+      - perl
+      - patch
+    override-pull: |
+      craftctl default
+      patch -p1 < "$CRAFT_PROJECT_DIR/snap/local/snap-ipc-prefix.patch"
+    override-build: |
+      craftctl default
+      # build.rs writes the completions and manual page under target/.
+      install -Dm644 target/completion/tw.bash \
+        "$CRAFT_PART_INSTALL/share/bash-completion/completions/tw"
+      install -Dm644 LICENSE -t "$CRAFT_PART_INSTALL/usr/share/doc/tabiew"
