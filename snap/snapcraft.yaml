@@ -2,6 +2,7 @@ name: tabiew
 base: core26
 version: '0.16.0'
 title: Tabiew
+icon: snap/gui/tabiew.png
 summary: View and query CSV, Parquet, JSON, Excel and SQLite files in the terminal
 description: |
   Tabiew (tw) opens tabular data in an interactive terminal viewer. It reads

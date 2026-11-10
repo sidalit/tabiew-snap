@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="snap/gui/tabiew.png" alt="Tabiew logo" width="128" />
+
 # Tabiew
 
 **View and query CSV, Parquet, JSON, Excel and SQLite files in the terminal.**
